@@ -1,7 +1,7 @@
-# basic blinky-lite tray
+# sync-transmit blinky-lite tray
 ## need to add .env file with the following
 PROJECT=blinky-lite<br/>
-MQTTCLIENTID=basic-tray-01<br/>
+MQTTCLIENTID=sync-transmit-01<br/>
 MQTTSERVERIP=broker.shiftr.io<br/>
 MQTTUSERNAME=xxxxxxxx<br/>
 MQTTPASSWORD=xxxxxxxx<br/>
