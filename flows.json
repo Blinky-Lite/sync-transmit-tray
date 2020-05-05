@@ -9,14 +9,14 @@
     {
         "id": "5f562f66.a301e",
         "type": "tab",
-        "label": "Cube-01",
+        "label": "sync-transmit-01",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "c4285970.3276d8",
+        "id": "9e3e4566.027698",
         "type": "tab",
-        "label": "web-app",
+        "label": "sync-receive-01",
         "disabled": false,
         "info": ""
     },
@@ -216,7 +216,7 @@
         "type": "serial-port",
         "z": "",
         "serialport": "/dev/rfcomm0",
-        "serialbaud": "57600",
+        "serialbaud": "9600",
         "databits": "8",
         "parity": "none",
         "stopbits": "1",
@@ -253,7 +253,7 @@
         "id": "44b51478.9c022c",
         "type": "websocket-listener",
         "z": "",
-        "path": "/app/websocket",
+        "path": "/sync-transmit/websocket",
         "wholemsg": "false"
     },
     {
@@ -262,6 +262,33 @@
         "z": "",
         "name": "blinky-lite-core-jwt-key",
         "secret": "$(JWTKEYSECRET)"
+    },
+    {
+        "id": "f3a00884.6a1308",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "/dev/rfcomm1",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "12",
+        "bin": "bin",
+        "out": "count",
+        "addchar": "",
+        "responsetimeout": "1000"
+    },
+    {
+        "id": "cc197431.86bee8",
+        "type": "websocket-listener",
+        "z": "",
+        "path": "/sync-receive/websocket",
+        "wholemsg": "false"
     },
     {
         "id": "ea743ee6.d8b55",
@@ -354,7 +381,7 @@
         "type": "function",
         "z": "5f562f66.a301e",
         "name": "CreateSettings",
-        "func": "var device = flow.get('device');\n//node.warn('newSetting = ' + flow.get('newSetting').toString())\n\nvar bufsize = 4 + 76 + 16 + 16 + 16 + 4;\n\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\n\nvar ioffset = 0\nsettingsView.setInt32(ioffset, flow.get('newSetting'), true);\nioffset = ioffset + 4;\nsettingsView.setInt32(ioffset, device.numEvents.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.sigPower.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.statusLedChannel.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.intervalUs.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime1.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime2.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime3.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime4.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime1.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime2.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime3.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime4.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint8(ioffset, device.channelStateMask1.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask2.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask3.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask4.value);\nioffset =  ioffset + 1;\nfor (var ii = 0; ii < 76; ++ii)\n{\n   settingsView.setUint8(ioffset, device.timeLine.value[1][ii]); \n   ++ioffset;\n}\n\nreturn {topic:'settings',payload:Buffer.from(buffer)};\n",
+        "func": "var device = flow.get('device');\n//node.warn('newSetting = ' + flow.get('newSetting').toString())\n\nvar bufsize = 4 + 76 + 28 + 16 + 16 + 4;\n\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\n\nvar ioffset = 0\nsettingsView.setInt32(ioffset, flow.get('newSetting'), true);\nioffset = ioffset + 4;\nsettingsView.setInt32(ioffset, device.numEvents.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.sigPower.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.statusLedChannel.value, true);\nioffset =  ioffset + 4;\nsettingsView.setFloat32(ioffset, device.rfFreq.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.transAddr.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.modemConfigIndex.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.intervalUs.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime1.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime2.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime3.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime4.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime1.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime2.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime3.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime4.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint8(ioffset, device.channelStateMask1.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask2.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask3.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask4.value);\nioffset =  ioffset + 1;\nfor (var ii = 0; ii < 76; ++ii)\n{\n   settingsView.setUint8(ioffset, device.timeLine.value[1][ii]); \n   ++ioffset;\n}\n\nreturn {topic:'settings',payload:Buffer.from(buffer)};\n",
         "outputs": 1,
         "noerr": 0,
         "x": 540,
@@ -427,7 +454,7 @@
         "func": "flow.set('device', msg.payload);\nflow.set('newSetting', 1);\nreturn null;",
         "outputs": 0,
         "noerr": 0,
-        "x": 860,
+        "x": 840,
         "y": 340,
         "wires": []
     },
@@ -501,9 +528,9 @@
         "id": "6c15c07a.68169",
         "type": "link in",
         "z": "5f562f66.a301e",
-        "name": "cube-01 Settings In",
+        "name": "sync-transmit-01 Settings In",
         "links": [
-            "9e56a59.12b4158"
+            "80a529df.319ae8"
         ],
         "x": 35,
         "y": 200,
@@ -533,10 +560,10 @@
         "id": "107beeed.934ed1",
         "type": "websocket out",
         "z": "5f562f66.a301e",
-        "name": "/app/websocket",
+        "name": "/sync-transmit/websocket",
         "server": "44b51478.9c022c",
         "client": "",
-        "x": 1380,
+        "x": 1410,
         "y": 460,
         "wires": []
     },
@@ -544,9 +571,9 @@
         "id": "65c2a6ff.a7b8f8",
         "type": "link in",
         "z": "5f562f66.a301e",
-        "name": "cube-01 to websocket",
+        "name": "sync-transmit-01 to websocket",
         "links": [
-            "c2b927f.87df7d8"
+            "59adc6a1.990668"
         ],
         "x": 1215,
         "y": 520,
@@ -942,388 +969,6 @@
         ]
     },
     {
-        "id": "9e56a59.12b4158",
-        "type": "link out",
-        "z": "c4285970.3276d8",
-        "name": "Settings Out",
-        "links": [
-            "6c15c07a.68169",
-            "e5570491.c3b9a8"
-        ],
-        "x": 1075,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "c2b927f.87df7d8",
-        "type": "link out",
-        "z": "c4285970.3276d8",
-        "name": "Token Check",
-        "links": [
-            "3a74e83e.288018",
-            "65c2a6ff.a7b8f8"
-        ],
-        "x": 1075,
-        "y": 120,
-        "wires": []
-    },
-    {
-        "id": "bb2bf17e.0eeb8",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Send Token",
-        "func": "return {topic:'getJwtToken', payload:{topic:'getJwtToken', userID:msg.userID, token: msg.token}};\n",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 890,
-        "y": 160,
-        "wires": [
-            [
-                "c2b927f.87df7d8"
-            ]
-        ]
-    },
-    {
-        "id": "5da8e3d5.f40e0c",
-        "type": "JsonWebToken",
-        "z": "c4285970.3276d8",
-        "name": "get Token",
-        "tokenconfig": "144aea5f.fcbd96",
-        "x": 740,
-        "y": 160,
-        "wires": [
-            [
-                "bb2bf17e.0eeb8"
-            ]
-        ]
-    },
-    {
-        "id": "8f2c12d3.cfba4",
-        "type": "JsonWebToken",
-        "z": "c4285970.3276d8",
-        "name": "decrypt Token",
-        "tokenconfig": "144aea5f.fcbd96",
-        "x": 780,
-        "y": 80,
-        "wires": [
-            [
-                "179aeb8b.254ce4"
-            ]
-        ]
-    },
-    {
-        "id": "179aeb8b.254ce4",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Check Token",
-        "func": "if (Number(msg.token) == msg.userID)\n{\n    return [msg, {topic : 'acknowledge', payload:{topic:'settingAcknowledge', payload: 'Success!', userID : msg.userID}}]\n}\nreturn [null, {topic : 'acknowledge', payload:{topic:'settingAcknowledge', payload: 'Bad token', userID : msg.userID}}];",
-        "outputs": 2,
-        "noerr": 0,
-        "x": 950,
-        "y": 80,
-        "wires": [
-            [
-                "9e56a59.12b4158"
-            ],
-            [
-                "c2b927f.87df7d8"
-            ]
-        ]
-    },
-    {
-        "id": "3868e942.844f96",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "sendSettingToMqtt",
-        "func": "return {\n    topic   : msg.payload.mqttMessage.topic, \n    payload : msg.payload.mqttMessage.payload, \n    token   : msg.payload.token, \n    userID  : msg.payload.userID };\n",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 590,
-        "y": 80,
-        "wires": [
-            [
-                "8f2c12d3.cfba4"
-            ]
-        ]
-    },
-    {
-        "id": "6255e89b.eda558",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "CheckLogin",
-        "func": "if (global.get('settingsPassword') == 'NULL')\n{\n    return [null, {topic:'getJwtToken',payload:msg.payload.userID, userID : msg.payload.userID}];    \n}\nif (msg.payload.payload.loginPassword != global.get('settingsPassword'))\n{\n    return [{topic:'getJwtToken', payload:{topic:'getJwtToken', userID:msg.payload.userID, token: null}}, null];\n}\nreturn [null, {topic:'getJwtToken',payload:msg.payload.userID, userID : msg.payload.userID}];",
-        "outputs": 2,
-        "noerr": 0,
-        "x": 570,
-        "y": 140,
-        "wires": [
-            [
-                "c2b927f.87df7d8"
-            ],
-            [
-                "5da8e3d5.f40e0c"
-            ]
-        ]
-    },
-    {
-        "id": "d325c712.5eb1c8",
-        "type": "switch",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "property": "payload.topic",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "sendSettingToMqtt",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "getJwtToken",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 410,
-        "y": 80,
-        "wires": [
-            [
-                "3868e942.844f96"
-            ],
-            [
-                "6255e89b.eda558"
-            ]
-        ]
-    },
-    {
-        "id": "c78198ee.1c5e38",
-        "type": "json",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 290,
-        "y": 80,
-        "wires": [
-            [
-                "d325c712.5eb1c8"
-            ]
-        ]
-    },
-    {
-        "id": "c43545a1.5deb28",
-        "type": "websocket in",
-        "z": "c4285970.3276d8",
-        "name": "/app/websocket",
-        "server": "44b51478.9c022c",
-        "client": "",
-        "x": 140,
-        "y": 80,
-        "wires": [
-            [
-                "c78198ee.1c5e38"
-            ]
-        ]
-    },
-    {
-        "id": "1482e22f.57fa2e",
-        "type": "http in",
-        "z": "c4285970.3276d8",
-        "name": "/app",
-        "url": "/app",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 90,
-        "y": 240,
-        "wires": [
-            [
-                "71ce0943.81bf18"
-            ]
-        ]
-    },
-    {
-        "id": "71ce0943.81bf18",
-        "type": "function",
-        "z": "c4285970.3276d8",
-        "name": "Set Name And Device Type",
-        "func": "msg.payload['script'] = {};\nmsg.payload['script']['name'] = msg.payload.name\nmsg.payload['script']['deviceType'] = 'sync-transmit';\nmsg.payload['script']['project'] = global.get('project');\nreturn msg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 300,
-        "y": 240,
-        "wires": [
-            [
-                "6533b535.454c4c"
-            ]
-        ]
-    },
-    {
-        "id": "c76a9544.852e88",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Set Title",
-        "field": "payload.title",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "Sync-Transmitter {{{payload.script.name}}}",
-        "output": "str",
-        "x": 240,
-        "y": 320,
-        "wires": [
-            [
-                "c98976c.3996888"
-            ]
-        ]
-    },
-    {
-        "id": "f078068d.c90bc8",
-        "type": "subflow:6a402d92.12d7c4",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "x": 1130,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "c98976c.3996888",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "script.global",
-        "field": "payload.script.global",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "// Global Javascript\n        var restfulDevice = \n        {\n            deviceType  : '{{{payload.script.deviceType}}}',\n            name        : '{{{payload.script.name}}}',\n            project     : '{{{payload.script.project}}}'\n        };\n        var mqttDevice = null;\n        var device = null;\n        var MAXNUMEVENTS = 76;\n        var editingTimeline = false;\n        var editingChannel = false;\n        var numEvents = 1;\n\n        useWebSockets(true);\n        function onDocumentReady()\n        {\n            createEventTable();\n            enableTimelineEditor(false);\n            enableChannelEditor(false);\n\n        }\n        function onWebSocketOpen()\n        {\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n//            console.log(msg);\n            switch(msg.topic)\n            {\n                case 'readings':\n                    if (msg.mqttDevice.name == restfulDevice.name)\n                    {\n                        heartbeat();\n                        device = msg.payload;\n                        mqttDevice = msg.mqttDevice;\n                        updateDmaReadings();\n                    }\n                    break;\n                case 'getArchiveValues':\n                    if (msg.userID == userID)\n                    {\n                    }\n                    break;\n                case 'getJwtToken':\n                    if (msg.userID == userID) loadJwtToken(msg);\n                    break;\n                case 'settingAcknowledge':\n                    if (msg.userID == userID)\n                    {\n                        if (msg.payload != 'Success!') acknowledgeDialog('Acknowledge', 'Setting', msg.payload);\n                    }\n                    break;\n                default:\n                // code block\n            }\n        }\n        function createEventTable()\n        {\n            var rowHtml = '<tr><td><span class=\"card-text\" style=\"font-size: 150%;\">Bit</span></td>';\n            for (var ie = 0; ie < MAXNUMEVENTS; ++ie) \n            {\n                if (ie < 10)\n                {\n                    rowHtml = rowHtml + '<td><span class=\"card-text\" style=\"font-size: 150%;\">' + '0' + ie.toString() + '</span></td>';\n                }\n                else\n                {\n                    rowHtml = rowHtml + '<td><span class=\"card-text\" style=\"font-size: 150%;\">' + ie.toString() + '</span></td>';\n                }\n            }\n            rowHtml = rowHtml + '</tr>';\n            $('#eventTable').append(rowHtml);\n            for (var ib = 0; ib < 8; ++ib)\n            {\n                rowHtml = '<tr><td><span class=\"card-text\" style=\"font-size: 150%;\">'+ ib.toString() + '</span></td>';\n                for (var ie = 0; ie < MAXNUMEVENTS; ++ie) \n                    rowHtml = rowHtml + '<td><input type=\"checkbox\" class=\"inputLarger\" id=\"' + 'b' + ib.toString() + 'e' + ie.toString() + '\"></td>';\n                rowHtml = rowHtml + '</tr>';\n                $('#eventTable').append(rowHtml);\n            }\n\n            for (var ie = numEvents; ie < MAXNUMEVENTS; ++ie) hideEvent(ie,true);\n        }\n        function hideEvent(ievent, hide)\n        {\n            var header = '#eventTable tr > *:nth-child(' + (ievent + 2).toString() + ')';\n            if (hide)  $(header).hide();\n            if (!hide) $(header).show();\n        }\n        function enableTimelineEditor(enable)\n        {\n            for (var ib = 0; ib <= 8; ++ib)\n            {\n                for (var ie = 0; ie < MAXNUMEVENTS; ++ie)\n                {\n                    var checkBoxId = '#b' + ib.toString() + 'e' + ie.toString();\n                    $(checkBoxId).prop(\"disabled\", !enable);\n                }\n            }\n            $('#intervalUs').prop(\"disabled\", !enable);\n            $('#sigPower').prop(\"disabled\", !enable);\n            if ( enable)\n            {\n                $('#addEventRow').show();\n                $('#editTimelineButton').text('Stop Editing');\n            }\n            else\n            {\n                $('#addEventRow').hide();\n                $('#editTimelineButton').text('Edit');\n            }\n\n        }\n        function enableChannelEditor(enable)\n        {\n            for (var ib = 0; ib <= 8; ++ib)\n            {\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                    $(checkBoxId).prop(\"disabled\", !enable);\n                }\n            }\n            $('#c0Start').prop(\"disabled\", !enable);\n            $('#c1Start').prop(\"disabled\", !enable);\n            $('#c2Start').prop(\"disabled\", !enable);\n            $('#c3Start').prop(\"disabled\", !enable);\n            $('#c0Stop').prop(\"disabled\", !enable);\n            $('#c1Stop').prop(\"disabled\", !enable);\n            $('#c2Stop').prop(\"disabled\", !enable);\n            $('#c3Stop').prop(\"disabled\", !enable);\n            $('#c0StatusLed').prop(\"disabled\", !enable);\n            $('#c1StatusLed').prop(\"disabled\", !enable);\n            $('#c2StatusLed').prop(\"disabled\", !enable);\n            $('#c3StatusLed').prop(\"disabled\", !enable);\n            if ( enable)\n            {\n                $('#editChannelButton').text('Stop Editing');\n            }\n            else\n            {\n                $('#editChannelButton').text('Edit');\n            }\n        }\n        function editTimeline()\n        {\n            editingTimeline = !editingTimeline;\n            enableTimelineEditor(editingTimeline);\n\n            if (!editingTimeline)\n            {\n                var pow2 = [1,2,4,8,16,32,64,128];\n                for (var ie = 0; ie < MAXNUMEVENTS; ++ie)\n                {\n                    device.timeLine.value[1][ie] = 0;\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + ie.toString();\n                        if ($(checkBoxId).prop(\"checked\")) \n                        {\n                            device.timeLine.value[1][ie] = device.timeLine.value[1][ie] + pow2[ib];\n                        }\n                    }\n                }\n                device.numEvents.value = numEvents;\n                if (!isNaN(Number($('#intervalUs').val())))\n                {\n                    device.intervalUs.value = Number($('#intervalUs').val());\n                }\n                if (!isNaN(Number($('#sigPower').val())))\n                {\n                    device.sigPower.value = Number($('#sigPower').val());\n                }\n\n                var mqttMessage = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload :  device\n                };\n                checkLogin(sendSettingToMqtt, mqttMessage);\n            }\n        }\n        function editChannelConfig()\n        {\n            editingChannel = !editingChannel;\n            enableChannelEditor(editingChannel);\n            if (!editingChannel)\n            {\n                var pow2 = [1,2,4,8,16,32,64,128];\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var startId = '#c' + ic.toString() + 'Start';\n                    var stopId = '#c' + ic.toString() + 'Stop';\n                    var startDeviceAtt = 'channelBeginTime' + (ic + 1).toString();\n                    var stopDeviceAtt =  'channelEndTime'   + (ic + 1).toString();\n                    var maskAtt = 'channelStateMask' + (ic + 1).toString();\n\n                    device[maskAtt].value = 0;\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                        if ($(checkBoxId).prop(\"checked\")) \n                        {\n                            device[maskAtt].value = device[maskAtt].value + pow2[ib];\n                        }\n                    }\n                    if (!isNaN(Number($(startId).val()))) device[startDeviceAtt].value = Number($(startId).val());\n                    if (!isNaN(Number($(stopId).val() ))) device[stopDeviceAtt].value  = Number($(stopId).val());\n                    var statusLedButtonId = '#c' + ic.toString() + 'StatusLed';\n                    if ($(statusLedButtonId).prop(\"checked\")) device.statusLedChannel.value = ic;\n                }\n\n                var mqttMessage = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload :  device\n                };\n                checkLogin(sendSettingToMqtt, mqttMessage);\n            }\n        }\n        function updateDmaReadings()\n        {\n            $('#linkQualityId').text(device.linkQuality.value);\n            $('#signalLevelId').text(device.signalLevel.value);\n            if (!editingTimeline)\n            {\n                numEvents = device.numEvents.value;\n                $('#intervalUs').val(device.intervalUs.value);\n                $('#numberOfEvents').text(numEvents);\n                $('#sigPower').val(device.sigPower.value);\n\n                for (var ie = numEvents; ie < MAXNUMEVENTS; ++ie) hideEvent(ie,true);\n                for (var ie = 0; ie < numEvents; ++ie)\n                {\n                    hideEvent(ie, false);\n                    var bits = getBits(device.timeLine.value[1][ie]);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + ie.toString();\n                        var checked = false;\n                        if (bits[ib] == 1) checked = true;\n                        $(checkBoxId).prop(\"checked\", checked);\n                    }\n                }\n            }\n            if(!editingChannel)\n            {\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var startId = '#c' + ic.toString() + 'Start';\n                    var stopId = '#c' + ic.toString() + 'Stop';\n                    var startDeviceAtt = 'channelBeginTime' + (ic + 1).toString();\n                    var stopDeviceAtt =  'channelEndTime'   + (ic + 1).toString();\n                    var maskAtt = 'channelStateMask' + (ic + 1).toString();\n                    $(startId).val(device[startDeviceAtt].value);\n                    $(stopId).val(device[stopDeviceAtt].value);\n                    var bits = getBits(device[maskAtt].value);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                        var checked = false;\n                        if (bits[ib] == 1) checked = true;\n                        $(checkBoxId).prop(\"checked\", checked);\n                    }\n                    var statusLedButtonId = '#c' + ic.toString() + 'StatusLed';\n                    if (device.statusLedChannel.value == ic)\n                    {\n                        $(statusLedButtonId).prop(\"checked\", true);\n                    }\n                    else\n                    {\n                        $(statusLedButtonId).prop(\"checked\", false);\n                    }\n                }\n            }\n        }\n        function getBits(bytey)\n        {\n            var testByte = bytey;\n            var check = [0,0,0,0,0,0,0,0];\n            for (var ib = 0; ib < 8; ++ib)\n            {\n                check[ib] = testByte & 1;\n                testByte = testByte >> 1;\n            }\n            return check;\n        }\n        function addEvent(add)\n        {\n            if (add > 0)\n            {\n                if (numEvents < MAXNUMEVENTS)\n                {\n                    numEvents = numEvents + 1; \n                    hideEvent(numEvents - 1,false);\n                    $('#numberOfEvents').text(numEvents);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + (numEvents - 1).toString();\n                        $(checkBoxId).prop(\"checked\", false);\n                    }\n                }\n            }\n            else\n            {\n                if (numEvents > 1)\n                {\n                    numEvents = numEvents - 1; \n                    hideEvent(numEvents,true);\n                    $('#numberOfEvents').text(numEvents);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + numEvents.toString();\n                        $(checkBoxId).prop(\"checked\", false);\n                    }\n                }\n            }\n            \n        }\n",
-        "output": "str",
-        "x": 650,
-        "y": 240,
-        "wires": [
-            [
-                "e2fa40e5.9c393"
-            ]
-        ]
-    },
-    {
-        "id": "c1034be9.37f0a8",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "javascript",
-        "field": "payload.javascript",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "{{{payload.script.global}}}\n{{{payload.script.dangerZone}}}\n",
-        "output": "str",
-        "x": 640,
-        "y": 360,
-        "wires": [
-            [
-                "7fef0c19.4ed014"
-            ]
-        ]
-    },
-    {
-        "id": "450b0136.7ccbd",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "body",
-        "field": "payload.body",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "    <div width=\"100%\">\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.timeline}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.channelConfig}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.wifimon}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.dangerZone}}}\n            </div>\n        </div>\n    </div>\n    ",
-        "output": "str",
-        "x": 950,
-        "y": 440,
-        "wires": [
-            [
-                "f078068d.c90bc8"
-            ]
-        ]
-    },
-    {
-        "id": "b6fcc866.328488",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.wifimon",
-        "field": "payload.html.wifimon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Dashboard HTML -->\n                <div class='card'>\n                    <p class='card-title'>WiFi Connection</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'  style='padding-top: 0px;'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Device Update</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <img src='/img/heartRed.png' id='heartBeatID' width='100px' height='100px'/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Signal Level (dBm)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='signalLevelId' >-100</span>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Link Quality (/70)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='linkQualityId' >-1</span>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 970,
-        "y": 360,
-        "wires": [
-            [
-                "45e607d2.0f0d38"
-            ]
-        ]
-    },
-    {
-        "id": "7fef0c19.4ed014",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.timeline",
-        "field": "payload.html.timeline",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Dashboard HTML -->\n                <div class='card'>\n                    <table class='card-title' width='100%'>\n                        <tr>\n                            <td width='20%' >\n                            </td>\n                            <td width='60%' align='center'>\n                                <span >Timeline</span>\n                            </td>\n                            <td width='20%'>\n                                <button class='btn btn-block card-button' style='font-size: 50%;' id='editTimelineButton' onclick=\"editTimeline()\" >Edit</button>\n                            </td>\n                        </tr>\n                    </table>\n                    <div class='card-body' align=\"center\">\n                        <div class='row' style='padding-bottom: 25px;' id='addEventRow'>\n                            <table width=\"100%\">\n                                <tr>\n                                    <td width=\"40%\">\n                                        <span class='card-text' >Number of Events</span>\n                                    </td>\n                                    <td width=\"20%\">\n                                        <button class='btn btn-block card-button' style='font-size: 200%;'  onclick=\"addEvent(-1)\" >-</button>\n                                    </td>\n                                     <td width=\"20%\" align='center'>\n                                        <span class='card-text' id='numberOfEvents'>1</span>\n                                    </td>\n                                    <td width=\"20%\">\n                                        <button class='btn btn-block card-button' style='font-size: 200%;' onclick=\"addEvent(1)\" >+</button>\n                                </tr>\n                            </table>\n                        </div>\n                        <div class='row' style='padding-bottom: 25px;'>\n                            <table id=\"eventTable\" width=\"100%\">\n                            </table>\n                        </div>\n                        <div class='row' style='padding-bottom: 25px;'>\n                            <table id=\"eventTableProps\" width=\"100%\">\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Interval (uS)</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"intervalUs\" type=\"text\" value=\"0\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Transmitter Power (dBm)</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"sigPower\" type=\"text\" value=\"-100\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 970,
-        "y": 240,
-        "wires": [
-            [
-                "340dfe43.493122"
-            ]
-        ]
-    },
-    {
-        "id": "e2fa40e5.9c393",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "script.dangerZone",
-        "field": "payload.script.dangerZone",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "// dangerZone JavaScript\n        function restartTray()\n        {\n            optionDialog('Danger! Will Robinson, Danger!', 'Restart Tray', 'This should not be done lightly', ['Reset Tray','Cancel'], [function (){restartTrayButtonPress();}, function (){$( \"#optionDialog\" ).dialog( \"close\" );}]);\n        }\n        function restartTrayButtonPress()\n        {\n            $( \"#optionDialog\" ).dialog( \"close\" );\n            var mqttMessage = \n            {\n                topic   : restfulDevice.project + '/' +  restfulDevice.deviceType + '/' +  restfulDevice.name + '/restartTray',\n                payload :  1\n            };\n            checkLogin(sendSettingToMqtt, mqttMessage);\n        }\n",
-        "output": "str",
-        "x": 670,
-        "y": 320,
-        "wires": [
-            [
-                "c1034be9.37f0a8"
-            ]
-        ]
-    },
-    {
-        "id": "45e607d2.0f0d38",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "html.dangerZone",
-        "field": "payload.html.dangerZone",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "                <div class='danger-card'>\n                    <div class='row'>\n                        <div class='col-md-2'>\n                        </div>\n                        <div class='col-md-8'>\n                            <p class='danger-card-title'>Danger Zone</p>\n                         </div>\n                        <div class='col-md-2'>\n                        </div>\n                    </div>\n                    <div class='danger-card-body' align=\"center\">\n                        <div class='row'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='100%' align=\"center\">\n                                        <button class='btn danger-card-button big-text' id=\"restartTrayButton\" onclick=\"restartTray()\" >Restart Tray</button>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
-        "output": "str",
-        "x": 990,
-        "y": 400,
-        "wires": [
-            [
-                "450b0136.7ccbd"
-            ]
-        ]
-    },
-    {
         "id": "d3b167fa.414fa8",
         "type": "inject",
         "z": "3f2da72f.995ab8",
@@ -1431,127 +1076,6 @@
         ]
     },
     {
-        "id": "70be1872.dfaf48",
-        "type": "http in",
-        "z": "c4285970.3276d8",
-        "name": "/",
-        "url": "/",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 110,
-        "y": 640,
-        "wires": [
-            [
-                "f328fcb4.91dc"
-            ]
-        ]
-    },
-    {
-        "id": "b1885d32.8d9cc",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Body",
-        "field": "payload.body",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "<!-- Body HTML -->\n    <div class='container' width=\"100%\">\n        <div class='row vert-pad' >\n            <div class='col-md-12'>\n                <a class=\"btn jumbotron-button btn-block big-text bold-text\" width='80%' href=\"/app?name=01\" >\n                    <table width=\"100%\" alight=\"left\">\n                        <tr>\n                            <td width=\"30%\" align='center'> <img src=\"/img/basicYellow.png\" height=\"70px\"/></td>\n                            <td width=\"70%\" align=\"left\">Sync-Transmitter 01</td>\n                        </tr>\n                    </table>\n                </a>\n            </div>\n        </div>\n    </div>",
-        "output": "str",
-        "x": 770,
-        "y": 640,
-        "wires": [
-            [
-                "7efd2bdc.028104"
-            ]
-        ]
-    },
-    {
-        "id": "18e277b4.8fc208",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "Title",
-        "field": "payload.title",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "Sync-Transmitter",
-        "output": "str",
-        "x": 490,
-        "y": 640,
-        "wires": [
-            [
-                "fd81c62c.98f018"
-            ]
-        ]
-    },
-    {
-        "id": "f328fcb4.91dc",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "JavaScript",
-        "field": "payload.javascript",
-        "fieldType": "msg",
-        "format": "javascript",
-        "syntax": "mustache",
-        "template": "        useWebSockets(false);\n        function onDocumentReady()\n        {\n        }\n        function onWebSocketOpen()\n        {\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n        }\n\n",
-        "output": "str",
-        "x": 350,
-        "y": 640,
-        "wires": [
-            [
-                "18e277b4.8fc208"
-            ]
-        ]
-    },
-    {
-        "id": "fd81c62c.98f018",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "navBarIcon",
-        "field": "payload.navBarIcon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "basicYellow.png",
-        "output": "str",
-        "x": 630,
-        "y": 640,
-        "wires": [
-            [
-                "b1885d32.8d9cc"
-            ]
-        ]
-    },
-    {
-        "id": "7efd2bdc.028104",
-        "type": "subflow:6a402d92.12d7c4",
-        "z": "c4285970.3276d8",
-        "name": "",
-        "x": 910,
-        "y": 640,
-        "wires": []
-    },
-    {
-        "id": "6533b535.454c4c",
-        "type": "template",
-        "z": "c4285970.3276d8",
-        "name": "navBarIcon",
-        "field": "payload.navBarIcon",
-        "fieldType": "msg",
-        "format": "html",
-        "syntax": "mustache",
-        "template": "basicYellow.png",
-        "output": "str",
-        "x": 250,
-        "y": 280,
-        "wires": [
-            [
-                "c76a9544.852e88"
-            ]
-        ]
-    },
-    {
         "id": "c4a801b1.1c338",
         "type": "delay",
         "z": "5f562f66.a301e",
@@ -1598,9 +1122,411 @@
         ]
     },
     {
-        "id": "340dfe43.493122",
+        "id": "80a529df.319ae8",
+        "type": "link out",
+        "z": "3f2da72f.995ab8",
+        "name": "Settings Out",
+        "links": [
+            "6c15c07a.68169",
+            "e5570491.c3b9a8",
+            "faa32816.12ec88"
+        ],
+        "x": 1115,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "59adc6a1.990668",
+        "type": "link out",
+        "z": "3f2da72f.995ab8",
+        "name": "Token Check",
+        "links": [
+            "65c2a6ff.a7b8f8",
+            "116b74d6.fa9e6b"
+        ],
+        "x": 1115,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "c0f3ba34.357ff8",
+        "type": "function",
+        "z": "3f2da72f.995ab8",
+        "name": "Send Token",
+        "func": "return {topic:'getJwtToken', payload:{topic:'getJwtToken', userID:msg.userID, token: msg.token}};\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 930,
+        "y": 420,
+        "wires": [
+            [
+                "59adc6a1.990668"
+            ]
+        ]
+    },
+    {
+        "id": "5b7e2784.e4b0e8",
+        "type": "JsonWebToken",
+        "z": "3f2da72f.995ab8",
+        "name": "get Token",
+        "tokenconfig": "144aea5f.fcbd96",
+        "x": 780,
+        "y": 420,
+        "wires": [
+            [
+                "c0f3ba34.357ff8"
+            ]
+        ]
+    },
+    {
+        "id": "bcbe321.809a9d",
+        "type": "JsonWebToken",
+        "z": "3f2da72f.995ab8",
+        "name": "decrypt Token",
+        "tokenconfig": "144aea5f.fcbd96",
+        "x": 820,
+        "y": 340,
+        "wires": [
+            [
+                "e2764b65.a4d8e8"
+            ]
+        ]
+    },
+    {
+        "id": "e2764b65.a4d8e8",
+        "type": "function",
+        "z": "3f2da72f.995ab8",
+        "name": "Check Token",
+        "func": "if (Number(msg.token) == msg.userID)\n{\n    return [msg, {topic : 'acknowledge', payload:{topic:'settingAcknowledge', payload: 'Success!', userID : msg.userID}}]\n}\nreturn [null, {topic : 'acknowledge', payload:{topic:'settingAcknowledge', payload: 'Bad token', userID : msg.userID}}];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 990,
+        "y": 340,
+        "wires": [
+            [
+                "80a529df.319ae8"
+            ],
+            [
+                "59adc6a1.990668"
+            ]
+        ]
+    },
+    {
+        "id": "e65a9d0.a28526",
+        "type": "function",
+        "z": "3f2da72f.995ab8",
+        "name": "sendSettingToMqtt",
+        "func": "return {\n    topic   : msg.payload.mqttMessage.topic, \n    payload : msg.payload.mqttMessage.payload, \n    token   : msg.payload.token, \n    userID  : msg.payload.userID };\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 630,
+        "y": 340,
+        "wires": [
+            [
+                "bcbe321.809a9d"
+            ]
+        ]
+    },
+    {
+        "id": "568adb75.dc14c4",
+        "type": "function",
+        "z": "3f2da72f.995ab8",
+        "name": "CheckLogin",
+        "func": "if (global.get('settingsPassword') == 'NULL')\n{\n    return [null, {topic:'getJwtToken',payload:msg.payload.userID, userID : msg.payload.userID}];    \n}\nif (msg.payload.payload.loginPassword != global.get('settingsPassword'))\n{\n    return [{topic:'getJwtToken', payload:{topic:'getJwtToken', userID:msg.payload.userID, token: null}}, null];\n}\nreturn [null, {topic:'getJwtToken',payload:msg.payload.userID, userID : msg.payload.userID}];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 610,
+        "y": 400,
+        "wires": [
+            [
+                "59adc6a1.990668"
+            ],
+            [
+                "5b7e2784.e4b0e8"
+            ]
+        ]
+    },
+    {
+        "id": "cec1492c.8d6e98",
+        "type": "switch",
+        "z": "3f2da72f.995ab8",
+        "name": "",
+        "property": "payload.topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "sendSettingToMqtt",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "getJwtToken",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 450,
+        "y": 340,
+        "wires": [
+            [
+                "e65a9d0.a28526"
+            ],
+            [
+                "568adb75.dc14c4"
+            ]
+        ]
+    },
+    {
+        "id": "dbecbc87.72d8d",
+        "type": "json",
+        "z": "3f2da72f.995ab8",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 340,
+        "wires": [
+            [
+                "cec1492c.8d6e98"
+            ]
+        ]
+    },
+    {
+        "id": "a44c5f63.1ef47",
+        "type": "websocket in",
+        "z": "3f2da72f.995ab8",
+        "name": "/sync-transmit/websocket",
+        "server": "44b51478.9c022c",
+        "client": "",
+        "x": 150,
+        "y": 340,
+        "wires": [
+            [
+                "dbecbc87.72d8d"
+            ]
+        ]
+    },
+    {
+        "id": "b552ad49.01add",
+        "type": "http in",
+        "z": "5f562f66.a301e",
+        "name": "/sync-transmit",
+        "url": "/sync-transmit",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 600,
+        "wires": [
+            [
+                "9bcacf6d.ee3ff"
+            ]
+        ]
+    },
+    {
+        "id": "9bcacf6d.ee3ff",
+        "type": "function",
+        "z": "5f562f66.a301e",
+        "name": "Set Name And Device Type",
+        "func": "msg.payload['script'] = {};\nmsg.payload['script']['name'] = msg.payload.name\nmsg.payload['script']['deviceType'] = 'sync-transmit';\nmsg.payload['script']['project'] = global.get('project');\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 340,
+        "y": 600,
+        "wires": [
+            [
+                "277f4cb3.d2ff84"
+            ]
+        ]
+    },
+    {
+        "id": "11cdfa7f.995066",
         "type": "template",
-        "z": "c4285970.3276d8",
+        "z": "5f562f66.a301e",
+        "name": "Set Title",
+        "field": "payload.title",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "Sync-Transmitter {{{payload.script.name}}}",
+        "output": "str",
+        "x": 280,
+        "y": 680,
+        "wires": [
+            [
+                "2ed83759.f63fe8"
+            ]
+        ]
+    },
+    {
+        "id": "93870033.6d594",
+        "type": "subflow:6a402d92.12d7c4",
+        "z": "5f562f66.a301e",
+        "name": "",
+        "x": 1130,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "2ed83759.f63fe8",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "script.global",
+        "field": "payload.script.global",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// Global Javascript\n        var restfulDevice = \n        {\n            deviceType  : '{{{payload.script.deviceType}}}',\n            name        : '{{{payload.script.name}}}',\n            project     : '{{{payload.script.project}}}'\n        };\n        var mqttDevice = null;\n        var device = null;\n        var MAXNUMEVENTS = 76;\n        var editingTimeline = false;\n        var editingChannel = false;\n        var numEvents = 1;\n\n        useWebSockets(true);\n        function onDocumentReady()\n        {\n            createEventTable();\n            enableTimelineEditor(false);\n            enableChannelEditor(false);\n\n        }\n        function onWebSocketOpen()\n        {\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n//            console.log(msg);\n            switch(msg.topic)\n            {\n                case 'readings':\n                    if (msg.mqttDevice.name == restfulDevice.name)\n                    {\n                        heartbeat();\n                        device = msg.payload;\n                        mqttDevice = msg.mqttDevice;\n                        updateDmaReadings();\n                    }\n                    break;\n                case 'getArchiveValues':\n                    if (msg.userID == userID)\n                    {\n                    }\n                    break;\n                case 'getJwtToken':\n                    if (msg.userID == userID) loadJwtToken(msg);\n                    break;\n                case 'settingAcknowledge':\n                    if (msg.userID == userID)\n                    {\n                        if (msg.payload != 'Success!') acknowledgeDialog('Acknowledge', 'Setting', msg.payload);\n                    }\n                    break;\n                default:\n                // code block\n            }\n        }\n        function createEventTable()\n        {\n            var rowHtml = '<tr><td><span class=\"card-text\" style=\"font-size: 150%;\">Bit</span></td>';\n            for (var ie = 0; ie < MAXNUMEVENTS; ++ie) \n            {\n                if (ie < 10)\n                {\n                    rowHtml = rowHtml + '<td><span class=\"card-text\" style=\"font-size: 150%;\">' + '0' + ie.toString() + '</span></td>';\n                }\n                else\n                {\n                    rowHtml = rowHtml + '<td><span class=\"card-text\" style=\"font-size: 150%;\">' + ie.toString() + '</span></td>';\n                }\n            }\n            rowHtml = rowHtml + '</tr>';\n            $('#eventTable').append(rowHtml);\n            for (var ib = 0; ib < 8; ++ib)\n            {\n                rowHtml = '<tr><td><span class=\"card-text\" style=\"font-size: 150%;\">'+ ib.toString() + '</span></td>';\n                for (var ie = 0; ie < MAXNUMEVENTS; ++ie) \n                    rowHtml = rowHtml + '<td><input type=\"checkbox\" class=\"inputLarger\" id=\"' + 'b' + ib.toString() + 'e' + ie.toString() + '\"></td>';\n                rowHtml = rowHtml + '</tr>';\n                $('#eventTable').append(rowHtml);\n            }\n\n            for (var ie = numEvents; ie < MAXNUMEVENTS; ++ie) hideEvent(ie,true);\n        }\n        function hideEvent(ievent, hide)\n        {\n            var header = '#eventTable tr > *:nth-child(' + (ievent + 2).toString() + ')';\n            if (hide)  $(header).hide();\n            if (!hide) $(header).show();\n        }\n        function enableTimelineEditor(enable)\n        {\n            for (var ib = 0; ib <= 8; ++ib)\n            {\n                for (var ie = 0; ie < MAXNUMEVENTS; ++ie)\n                {\n                    var checkBoxId = '#b' + ib.toString() + 'e' + ie.toString();\n                    $(checkBoxId).prop(\"disabled\", !enable);\n                }\n            }\n            $('#intervalUs').prop(\"disabled\", !enable);\n            $('#sigPower').prop(\"disabled\", !enable);\n            $('#rfFreq').prop(\"disabled\", !enable);\n            $('#transAddr').prop(\"disabled\", !enable);\n            $('#modemConfigIndex').prop(\"disabled\", !enable);\n            if ( enable)\n            {\n                $('#addEventRow').show();\n                $('#editTimelineButton').text('Stop Editing');\n            }\n            else\n            {\n                $('#addEventRow').hide();\n                $('#editTimelineButton').text('Edit');\n            }\n\n        }\n        function enableChannelEditor(enable)\n        {\n            for (var ib = 0; ib <= 8; ++ib)\n            {\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                    $(checkBoxId).prop(\"disabled\", !enable);\n                }\n            }\n            $('#c0Start').prop(\"disabled\", !enable);\n            $('#c1Start').prop(\"disabled\", !enable);\n            $('#c2Start').prop(\"disabled\", !enable);\n            $('#c3Start').prop(\"disabled\", !enable);\n            $('#c0Stop').prop(\"disabled\", !enable);\n            $('#c1Stop').prop(\"disabled\", !enable);\n            $('#c2Stop').prop(\"disabled\", !enable);\n            $('#c3Stop').prop(\"disabled\", !enable);\n            $('#c0StatusLed').prop(\"disabled\", !enable);\n            $('#c1StatusLed').prop(\"disabled\", !enable);\n            $('#c2StatusLed').prop(\"disabled\", !enable);\n            $('#c3StatusLed').prop(\"disabled\", !enable);\n            if ( enable)\n            {\n                $('#editChannelButton').text('Stop Editing');\n            }\n            else\n            {\n                $('#editChannelButton').text('Edit');\n            }\n        }\n        function editTimeline()\n        {\n            editingTimeline = !editingTimeline;\n            enableTimelineEditor(editingTimeline);\n\n            if (!editingTimeline)\n            {\n                var pow2 = [1,2,4,8,16,32,64,128];\n                for (var ie = 0; ie < MAXNUMEVENTS; ++ie)\n                {\n                    device.timeLine.value[1][ie] = 0;\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + ie.toString();\n                        if ($(checkBoxId).prop(\"checked\")) \n                        {\n                            device.timeLine.value[1][ie] = device.timeLine.value[1][ie] + pow2[ib];\n                        }\n                    }\n                }\n                device.numEvents.value = numEvents;\n                if (!isNaN(Number($('#intervalUs').val())))\n                {\n                    device.intervalUs.value = Number($('#intervalUs').val());\n                }\n                if (!isNaN(Number($('#sigPower').val())))\n                {\n                    device.sigPower.value = Number($('#sigPower').val());\n                }\n                if (!isNaN(Number($('#rfFreq').val())))\n                {\n                    device.rfFreq.value = Number($('#rfFreq').val());\n                }\n                if (!isNaN(Number($('#transAddr').val())))\n                {\n                    device.transAddr.value = Number($('#transAddr').val());\n                }\n                device.modemConfigIndex.value = Number($('#modemConfigIndex').val());\n\n                var mqttMessage = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload :  device\n                };\n                checkLogin(sendSettingToMqtt, mqttMessage);\n            }\n        }\n        function editChannelConfig()\n        {\n            editingChannel = !editingChannel;\n            enableChannelEditor(editingChannel);\n            if (!editingChannel)\n            {\n                var pow2 = [1,2,4,8,16,32,64,128];\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var startId = '#c' + ic.toString() + 'Start';\n                    var stopId = '#c' + ic.toString() + 'Stop';\n                    var startDeviceAtt = 'channelBeginTime' + (ic + 1).toString();\n                    var stopDeviceAtt =  'channelEndTime'   + (ic + 1).toString();\n                    var maskAtt = 'channelStateMask' + (ic + 1).toString();\n\n                    device[maskAtt].value = 0;\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                        if ($(checkBoxId).prop(\"checked\")) \n                        {\n                            device[maskAtt].value = device[maskAtt].value + pow2[ib];\n                        }\n                    }\n                    if (!isNaN(Number($(startId).val()))) device[startDeviceAtt].value = Number($(startId).val());\n                    if (!isNaN(Number($(stopId).val() ))) device[stopDeviceAtt].value  = Number($(stopId).val());\n                    var statusLedButtonId = '#c' + ic.toString() + 'StatusLed';\n                    if ($(statusLedButtonId).prop(\"checked\")) device.statusLedChannel.value = ic;\n                }\n\n                var mqttMessage = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload :  device\n                };\n                checkLogin(sendSettingToMqtt, mqttMessage);\n            }\n        }\n        function updateDmaReadings()\n        {\n            $('#linkQualityId').text(device.linkQuality.value);\n            $('#signalLevelId').text(device.signalLevel.value);\n            if (!editingTimeline)\n            {\n                numEvents = device.numEvents.value;\n                $('#intervalUs').val(device.intervalUs.value);\n                $('#numberOfEvents').text(numEvents);\n                $('#sigPower').val(device.sigPower.value);\n                $('#rfFreq').val(device.rfFreq.value);\n                $('#transAddr').val(device.transAddr.value);\n                $('#modemConfigIndex').val(device.modemConfigIndex.value.toString());\n\n                for (var ie = numEvents; ie < MAXNUMEVENTS; ++ie) hideEvent(ie,true);\n                for (var ie = 0; ie < numEvents; ++ie)\n                {\n                    hideEvent(ie, false);\n                    var bits = getBits(device.timeLine.value[1][ie]);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + ie.toString();\n                        var checked = false;\n                        if (bits[ib] == 1) checked = true;\n                        $(checkBoxId).prop(\"checked\", checked);\n                    }\n                }\n            }\n            if(!editingChannel)\n            {\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var startId = '#c' + ic.toString() + 'Start';\n                    var stopId = '#c' + ic.toString() + 'Stop';\n                    var startDeviceAtt = 'channelBeginTime' + (ic + 1).toString();\n                    var stopDeviceAtt =  'channelEndTime'   + (ic + 1).toString();\n                    var maskAtt = 'channelStateMask' + (ic + 1).toString();\n                    $(startId).val(device[startDeviceAtt].value);\n                    $(stopId).val(device[stopDeviceAtt].value);\n                    var bits = getBits(device[maskAtt].value);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                        var checked = false;\n                        if (bits[ib] == 1) checked = true;\n                        $(checkBoxId).prop(\"checked\", checked);\n                    }\n                    var statusLedButtonId = '#c' + ic.toString() + 'StatusLed';\n                    if (device.statusLedChannel.value == ic)\n                    {\n                        $(statusLedButtonId).prop(\"checked\", true);\n                    }\n                    else\n                    {\n                        $(statusLedButtonId).prop(\"checked\", false);\n                    }\n                }\n            }\n        }\n        function getBits(bytey)\n        {\n            var testByte = bytey;\n            var check = [0,0,0,0,0,0,0,0];\n            for (var ib = 0; ib < 8; ++ib)\n            {\n                check[ib] = testByte & 1;\n                testByte = testByte >> 1;\n            }\n            return check;\n        }\n        function addEvent(add)\n        {\n            if (add > 0)\n            {\n                if (numEvents < MAXNUMEVENTS)\n                {\n                    numEvents = numEvents + 1; \n                    hideEvent(numEvents - 1,false);\n                    $('#numberOfEvents').text(numEvents);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + (numEvents - 1).toString();\n                        $(checkBoxId).prop(\"checked\", false);\n                    }\n                }\n            }\n            else\n            {\n                if (numEvents > 1)\n                {\n                    numEvents = numEvents - 1; \n                    hideEvent(numEvents,true);\n                    $('#numberOfEvents').text(numEvents);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'e' + numEvents.toString();\n                        $(checkBoxId).prop(\"checked\", false);\n                    }\n                }\n            }\n            \n        }\n",
+        "output": "str",
+        "x": 650,
+        "y": 600,
+        "wires": [
+            [
+                "3e698fbc.ebd62"
+            ]
+        ]
+    },
+    {
+        "id": "f250e09e.2cc1c",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "javascript",
+        "field": "payload.javascript",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "{{{payload.script.global}}}\n{{{payload.script.dangerZone}}}\n",
+        "output": "str",
+        "x": 640,
+        "y": 680,
+        "wires": [
+            [
+                "c7609f6c.a0cf1"
+            ]
+        ]
+    },
+    {
+        "id": "5648cf16.2aa48",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "body",
+        "field": "payload.body",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "    <div width=\"100%\">\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.timeline}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.channelConfig}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.wifimon}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.dangerZone}}}\n            </div>\n        </div>\n    </div>\n    ",
+        "output": "str",
+        "x": 950,
+        "y": 760,
+        "wires": [
+            [
+                "93870033.6d594"
+            ]
+        ]
+    },
+    {
+        "id": "271c7f06.e0e8a",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "html.wifimon",
+        "field": "payload.html.wifimon",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!-- Dashboard HTML -->\n                <div class='card'>\n                    <p class='card-title'>WiFi Connection</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'  style='padding-top: 0px;'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Device Update</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <img src='/img/heartRed.png' id='heartBeatID' width='100px' height='100px'/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Signal Level (dBm)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='signalLevelId' >-100</span>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Link Quality (/70)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='linkQualityId' >-1</span>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
+        "output": "str",
+        "x": 970,
+        "y": 680,
+        "wires": [
+            [
+                "406bc373.84f28c"
+            ]
+        ]
+    },
+    {
+        "id": "c7609f6c.a0cf1",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "html.timeline",
+        "field": "payload.html.timeline",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!-- Dashboard HTML -->\n                <div class='card'>\n                    <table class='card-title' width='100%'>\n                        <tr>\n                            <td width='20%' >\n                            </td>\n                            <td width='60%' align='center'>\n                                <span >Timeline</span>\n                            </td>\n                            <td width='20%'>\n                                <button class='btn btn-block card-button' style='font-size: 50%;' id='editTimelineButton' onclick=\"editTimeline()\" >Edit</button>\n                            </td>\n                        </tr>\n                    </table>\n                    <div class='card-body' align=\"center\">\n                        <div class='row' style='padding-bottom: 25px;' id='addEventRow'>\n                            <table width=\"100%\">\n                                <tr>\n                                    <td width=\"40%\">\n                                        <span class='card-text' >Number of Events</span>\n                                    </td>\n                                    <td width=\"20%\">\n                                        <button class='btn btn-block card-button' style='font-size: 200%;'  onclick=\"addEvent(-1)\" >-</button>\n                                    </td>\n                                     <td width=\"20%\" align='center'>\n                                        <span class='card-text' id='numberOfEvents'>1</span>\n                                    </td>\n                                    <td width=\"20%\">\n                                        <button class='btn btn-block card-button' style='font-size: 200%;' onclick=\"addEvent(1)\" >+</button>\n                                </tr>\n                            </table>\n                        </div>\n                        <div class='row' style='padding-bottom: 25px;'>\n                            <table id=\"eventTable\" width=\"100%\">\n                            </table>\n                        </div>\n                        <div class='row' style='padding-bottom: 25px;'>\n                            <table id=\"eventTableProps\" width=\"100%\">\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Interval (uS)</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"intervalUs\" type=\"text\" value=\"0\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Transmitter Power (dBm)</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"sigPower\" type=\"text\" value=\"-100\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >RF Frequency (MHz)</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"rfFreq\" type=\"text\" value=\"-100\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Transmitter Address</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"transAddr\" type=\"text\" value=\"-100\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Modem Config</span>\n                                    </td>\n                                    <td>\n                                        <select class=\"custom-select big-text\" style=\"height:70px;line-height:70px;\" id=\"modemConfigIndex\">\n                                          <option value=\"0\">Bw125Cr45Sf128</option>\n                                          <option value=\"1\">Bw500Cr45Sf128</option>\n                                          <option value=\"2\">Bw31_25Cr48Sf512</option>\n                                          <option value=\"3\">Bw125Cr48Sf4096</option>\n                                        </select>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
+        "output": "str",
+        "x": 970,
+        "y": 600,
+        "wires": [
+            [
+                "d870957e.efe1d8"
+            ]
+        ]
+    },
+    {
+        "id": "3e698fbc.ebd62",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "script.dangerZone",
+        "field": "payload.script.dangerZone",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// dangerZone JavaScript\n        function restartTray()\n        {\n            optionDialog('Danger! Will Robinson, Danger!', 'Restart Tray', 'This should not be done lightly', ['Reset Tray','Cancel'], [function (){restartTrayButtonPress();}, function (){$( \"#optionDialog\" ).dialog( \"close\" );}]);\n        }\n        function restartTrayButtonPress()\n        {\n            $( \"#optionDialog\" ).dialog( \"close\" );\n            var mqttMessage = \n            {\n                topic   : restfulDevice.project + '/' +  restfulDevice.deviceType + '/' +  restfulDevice.name + '/restartTray',\n                payload :  1\n            };\n            checkLogin(sendSettingToMqtt, mqttMessage);\n        }\n",
+        "output": "str",
+        "x": 670,
+        "y": 640,
+        "wires": [
+            [
+                "f250e09e.2cc1c"
+            ]
+        ]
+    },
+    {
+        "id": "406bc373.84f28c",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "html.dangerZone",
+        "field": "payload.html.dangerZone",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "                <div class='danger-card'>\n                    <div class='row'>\n                        <div class='col-md-2'>\n                        </div>\n                        <div class='col-md-8'>\n                            <p class='danger-card-title'>Danger Zone</p>\n                         </div>\n                        <div class='col-md-2'>\n                        </div>\n                    </div>\n                    <div class='danger-card-body' align=\"center\">\n                        <div class='row'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='100%' align=\"center\">\n                                        <button class='btn danger-card-button big-text' id=\"restartTrayButton\" onclick=\"restartTray()\" >Restart Tray</button>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
+        "output": "str",
+        "x": 990,
+        "y": 720,
+        "wires": [
+            [
+                "5648cf16.2aa48"
+            ]
+        ]
+    },
+    {
+        "id": "277f4cb3.d2ff84",
+        "type": "template",
+        "z": "5f562f66.a301e",
+        "name": "navBarIcon",
+        "field": "payload.navBarIcon",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "basicYellow.png",
+        "output": "str",
+        "x": 290,
+        "y": 640,
+        "wires": [
+            [
+                "11cdfa7f.995066"
+            ]
+        ]
+    },
+    {
+        "id": "d870957e.efe1d8",
+        "type": "template",
+        "z": "5f562f66.a301e",
         "name": "html.channelConfig",
         "field": "payload.html.channelConfig",
         "fieldType": "msg",
@@ -1609,10 +1535,872 @@
         "template": "<!-- channelConfig HTML -->\n                <div class='card'>\n                    <table class='card-title' width='100%'>\n                        <tr>\n                            <td width='20%' >\n                            </td>\n                            <td width='60%' align='center'>\n                                <span >Channel Configuration</span>\n                            </td>\n                            <td width='20%'>\n                                <button class='btn btn-block card-button' style='font-size: 50%;' id='editChannelButton' onclick=\"editChannelConfig()\" >Edit</button>\n                            </td>\n                        </tr>\n                    </table>\n                    <div class='card-body' align=\"center\">\n                        <div class='row' style='padding-bottom: 25px;'>\n                            <table width=\"100%\">\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">Bit</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">1</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">2</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">3</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">4</span></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">0</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">1</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">2</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">3</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">4</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">5</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">6</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">7</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\">Start (uS)</span></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c0Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c1Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c2Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c3Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\">Stop (uS)</span></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c0Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c1Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c2Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c3Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                </tr>\n                                 <tr>\n                                    <td width=\"20%\"><span class=\"card-text\">Status LED</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c0StatusLed\" name=\"statusLed\" value=\"0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c1StatusLed\" name=\"statusLed\" value=\"1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c2StatusLed\" name=\"statusLed\" value=\"2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c3StatusLed\"  name=\"statusLed\" value=\"3\"></td>\n                                </tr>\n                           </table>\n                        </div>\n                    </div>\n                </div>\n",
         "output": "str",
         "x": 990,
-        "y": 280,
+        "y": 640,
         "wires": [
             [
-                "b6fcc866.328488"
+                "271c7f06.e0e8a"
+            ]
+        ]
+    },
+    {
+        "id": "af68cced.56a86",
+        "type": "http in",
+        "z": "3f2da72f.995ab8",
+        "name": "/",
+        "url": "/",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 500,
+        "wires": [
+            [
+                "ceb117b.728cbe8"
+            ]
+        ]
+    },
+    {
+        "id": "882dbc4e.34065",
+        "type": "template",
+        "z": "3f2da72f.995ab8",
+        "name": "Body",
+        "field": "payload.body",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!-- Body HTML -->\n    <div class='container' width=\"100%\">\n        <div class='row vert-pad' >\n            <div class='col-md-12'>\n                <a class=\"btn jumbotron-button btn-block big-text bold-text\" width='80%' href=\"/sync-transmit?name=01\" >\n                    <table width=\"100%\" alight=\"left\">\n                        <tr>\n                            <td width=\"30%\" align='center'> <img src=\"/img/basicYellow.png\" height=\"70px\"/></td>\n                            <td width=\"70%\" align=\"left\">Sync-Transmitter 01</td>\n                        </tr>\n                    </table>\n                </a>\n            </div>\n        </div>\n        <div class='row vert-pad' >\n            <div class='col-md-12'>\n                <a class=\"btn jumbotron-button btn-block big-text bold-text\" width='80%' href=\"/sync-receive?name=01\" >\n                    <table width=\"100%\" alight=\"left\">\n                        <tr>\n                            <td width=\"30%\" align='center'> <img src=\"/img/basicYellow.png\" height=\"70px\"/></td>\n                            <td width=\"70%\" align=\"left\">Sync-Receiver 01</td>\n                        </tr>\n                    </table>\n                </a>\n            </div>\n        </div>\n    </div>",
+        "output": "str",
+        "x": 750,
+        "y": 500,
+        "wires": [
+            [
+                "11ffc407.64bccc"
+            ]
+        ]
+    },
+    {
+        "id": "39f94e3e.3e60e2",
+        "type": "template",
+        "z": "3f2da72f.995ab8",
+        "name": "Title",
+        "field": "payload.title",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "Sync-Link",
+        "output": "str",
+        "x": 470,
+        "y": 500,
+        "wires": [
+            [
+                "1e2f8257.5d5fae"
+            ]
+        ]
+    },
+    {
+        "id": "ceb117b.728cbe8",
+        "type": "template",
+        "z": "3f2da72f.995ab8",
+        "name": "JavaScript",
+        "field": "payload.javascript",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "        useWebSockets(false);\n        function onDocumentReady()\n        {\n        }\n        function onWebSocketOpen()\n        {\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n        }\n\n",
+        "output": "str",
+        "x": 330,
+        "y": 500,
+        "wires": [
+            [
+                "39f94e3e.3e60e2"
+            ]
+        ]
+    },
+    {
+        "id": "1e2f8257.5d5fae",
+        "type": "template",
+        "z": "3f2da72f.995ab8",
+        "name": "navBarIcon",
+        "field": "payload.navBarIcon",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "basicYellow.png",
+        "output": "str",
+        "x": 610,
+        "y": 500,
+        "wires": [
+            [
+                "882dbc4e.34065"
+            ]
+        ]
+    },
+    {
+        "id": "11ffc407.64bccc",
+        "type": "subflow:6a402d92.12d7c4",
+        "z": "3f2da72f.995ab8",
+        "name": "",
+        "x": 890,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c160ccf1.ecc4f",
+        "type": "serial in",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "serial": "f3a00884.6a1308",
+        "x": 110,
+        "y": 400,
+        "wires": [
+            [
+                "859821ea.0f769"
+            ]
+        ]
+    },
+    {
+        "id": "5722f1f0.87baf",
+        "type": "mqtt out",
+        "z": "9e3e4566.027698",
+        "name": "Publish Readings",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "broker": "79250bf3.365cc4",
+        "x": 1410,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "c511dea6.e23f3",
+        "type": "serial out",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "serial": "f3a00884.6a1308",
+        "x": 780,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "469503aa.06368c",
+        "type": "mqtt in",
+        "z": "9e3e4566.027698",
+        "name": "Subscribe Settings",
+        "topic": "+/+/+/setting",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "79250bf3.365cc4",
+        "x": 130,
+        "y": 140,
+        "wires": [
+            [
+                "f57586ed.ecbed8"
+            ]
+        ]
+    },
+    {
+        "id": "f57586ed.ecbed8",
+        "type": "json",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 290,
+        "y": 140,
+        "wires": [
+            [
+                "29c35de2.40a592"
+            ]
+        ]
+    },
+    {
+        "id": "56db31cb.20ff5",
+        "type": "file",
+        "z": "9e3e4566.027698",
+        "name": "Init Settings",
+        "filename": "",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1070,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "deafcefa.23a06",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "CreateSettings",
+        "func": "var device = flow.get('device');\n//node.warn('newSetting = ' + flow.get('newSetting').toString())\n\nvar bufsize = 56;\n\nvar buffer = new ArrayBuffer(bufsize);\nvar settingsView = new DataView(buffer);\n\nvar ioffset = 0\nsettingsView.setInt32(ioffset, flow.get('newSetting'), true);\nioffset = ioffset + 4;\nsettingsView.setInt32(ioffset, device.statusLedChannel.value, true);\nioffset =  ioffset + 4;\nsettingsView.setFloat32(ioffset, device.rfFreq.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.transAddr.value, true);\nioffset =  ioffset + 4;\nsettingsView.setInt32(ioffset, device.modemConfigIndex.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime1.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime2.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime3.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelBeginTime4.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime1.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime2.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime3.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint32(ioffset, device.channelEndTime4.value, true);\nioffset =  ioffset + 4;\nsettingsView.setUint8(ioffset, device.channelStateMask1.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask2.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask3.value);\nioffset =  ioffset + 1;\nsettingsView.setUint8(ioffset, device.channelStateMask4.value);\n\nreturn {topic:'settings',payload:Buffer.from(buffer)};\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 560,
+        "y": 460,
+        "wires": [
+            [
+                "c511dea6.e23f3"
+            ]
+        ]
+    },
+    {
+        "id": "e73588de.9b3238",
+        "type": "inject",
+        "z": "9e3e4566.027698",
+        "name": "init 1 sec",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "x": 120,
+        "y": 340,
+        "wires": [
+            [
+                "57051284.1d4dfc"
+            ]
+        ]
+    },
+    {
+        "id": "2e6c0430.be51ec",
+        "type": "file in",
+        "z": "9e3e4566.027698",
+        "name": "Init Settings",
+        "filename": "",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 450,
+        "y": 340,
+        "wires": [
+            [
+                "548fd3c.738352c"
+            ]
+        ]
+    },
+    {
+        "id": "548fd3c.738352c",
+        "type": "json",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 650,
+        "y": 340,
+        "wires": [
+            [
+                "741a633b.c365bc"
+            ]
+        ]
+    },
+    {
+        "id": "741a633b.c365bc",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Save initSettings in Memory",
+        "func": "flow.set('device', msg.payload);\nflow.set('newSetting', 1);\nreturn null;",
+        "outputs": 0,
+        "noerr": 0,
+        "x": 880,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "859821ea.0f769",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Read Serial Handshake",
+        "func": "var ib;\nvar device = flow.get('device');\nvar dataView     = new DataView(new ArrayBuffer(4));\nvar newSettingDone = 0;\nvar cubeInit = 0;\n\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[0 * 4 + 3 - ib]);\ncubeInit = dataView.getInt32(0);\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[1 * 4 + 3 - ib]);\nnewSettingDone = dataView.getInt32(0);\n\nvar newMsg = {topic:'userData', payload:[]};\nfor (var ii = 8; ii < msg.payload.length; ++ii) newMsg.payload[ii - 8] = msg.payload[ii];\n\nif (newSettingDone > 0) \n{\n    flow.set('newSetting', 0);\n}\nif(cubeInit == 1) flow.set('newSetting', 1);\n//node.warn(' ');\n//node.warn('newSettingDone = ' + newSettingDone.toString());\n//node.warn('cubeInit = ' + cubeInit.toString());\n\nreturn newMsg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310,
+        "y": 400,
+        "wires": [
+            [
+                "b7818884.e91148",
+                "deafcefa.23a06"
+            ]
+        ]
+    },
+    {
+        "id": "b3835f6.68e74a",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Make Pretty",
+        "func": "var jsonPretty = JSON.stringify(msg.payload,null,2);\nvar filename = flow.get('cubeInfo').deviceType + '-' + flow.get('cubeInfo').name + '.json';\nreturn {topic: msg.payload, payload:jsonPretty, 'filename':filename};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 890,
+        "y": 140,
+        "wires": [
+            [
+                "56db31cb.20ff5"
+            ]
+        ]
+    },
+    {
+        "id": "fb320eeb.29893",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Settings Alarm Scan",
+        "func": "scalarAlarmScan(msg.payload, 'setting');\nflow.set('device', msg.payload); \nflow.set('newSetting', 1); \nreturn msg;\n\nfunction getActionArray(device, type, actionType)\n{\n    var actionArray = [];\n    var keys = Object.keys(device);\n    for (var ii = 0; ii < keys.length; ++ii)\n    {\n        if (device[keys[ii]].hasOwnProperty('type'))\n        {\n            if (device[keys[ii]].type == type)\n            {\n                if (device[keys[ii]].action == actionType)\n                {\n                    actionArray.push(device[keys[ii]]);\n                }\n            }\n        }\n    }\n    return actionArray;\n}\nfunction scalarAlarmScan(device, actionType)\n{\n    var actionArray = getActionArray(device, 'scalar', actionType);\n    if (actionArray.length > 0)\n    {\n        for (var ii = 0; ii < actionArray.length; ++ii)\n        {\n            actionArray[ii].alarm.value = 0;\n            if (!isNaN(actionArray[ii].value))\n            {\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.low)  actionArray[ii].alarm.value = 1;\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.lolo) actionArray[ii].alarm.value = 3;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.high) actionArray[ii].alarm.value = 2;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.hihi) actionArray[ii].alarm.value = 4;\n            }\n        }\n    }\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 700,
+        "y": 140,
+        "wires": [
+            [
+                "b3835f6.68e74a"
+            ]
+        ]
+    },
+    {
+        "id": "a9799f6.311e06",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Readings Alarm Scan",
+        "func": "msg.payload.linkQuality.value     = global.get('linkQuality');\nmsg.payload.signalLevel.value     = global.get('signalLevel');\nscalarAlarmScan(msg.payload, 'reading');\nflow.set('device', msg.payload); \nmsg.topic = global.get('project') + '/' + flow.get('cubeInfo').deviceType + '/' + flow.get('cubeInfo').name + '/reading';\nreturn msg;\n\nfunction getActionArray(device, type, actionType)\n{\n    var actionArray = [];\n    var keys = Object.keys(device);\n    for (var ii = 0; ii < keys.length; ++ii)\n    {\n        if (device[keys[ii]].hasOwnProperty('type'))\n        {\n            if (device[keys[ii]].type == type)\n            {\n                if (device[keys[ii]].action == actionType)\n                {\n                    actionArray.push(device[keys[ii]]);\n                }\n            }\n        }\n    }\n    return actionArray;\n}\nfunction scalarAlarmScan(device, actionType)\n{\n    var actionArray = getActionArray(device, 'scalar', actionType);\n    if (actionArray.length > 0)\n    {\n        for (var ii = 0; ii < actionArray.length; ++ii)\n        {\n            actionArray[ii].alarm.value = 0;\n            if (!isNaN(actionArray[ii].value))\n            {\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.low)  actionArray[ii].alarm.value = 1;\n                if (actionArray[ii].value < actionArray[ii].alarm.limits.lolo) actionArray[ii].alarm.value = 3;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.high) actionArray[ii].alarm.value = 2;\n                if (actionArray[ii].value > actionArray[ii].alarm.limits.hihi) actionArray[ii].alarm.value = 4;\n            }\n        }\n    }\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 800,
+        "y": 400,
+        "wires": [
+            [
+                "e9880033.900be",
+                "436b7210.dd044c"
+            ]
+        ]
+    },
+    {
+        "id": "faa32816.12ec88",
+        "type": "link in",
+        "z": "9e3e4566.027698",
+        "name": "sync-receive-01 Settings In",
+        "links": [
+            "80a529df.319ae8"
+        ],
+        "x": 55,
+        "y": 200,
+        "wires": [
+            [
+                "af219179.74fb"
+            ]
+        ]
+    },
+    {
+        "id": "e9880033.900be",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Split MQTT topic",
+        "func": "var mqttArray = msg.topic.split('/');\nvar device = \n{\n    project     : mqttArray[0],\n    deviceType  : mqttArray[1],\n    name        : mqttArray[2],\n    prop        : mqttArray[3],\n};\nreturn {topic : msg.topic, payload:{topic:'readings', mqttDevice : device, payload:msg.payload}};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1030,
+        "y": 460,
+        "wires": [
+            [
+                "7ed264c5.f194ac"
+            ]
+        ]
+    },
+    {
+        "id": "93e54d02.08f3c",
+        "type": "websocket out",
+        "z": "9e3e4566.027698",
+        "name": "/sync-receive/websocket",
+        "server": "cc197431.86bee8",
+        "client": "",
+        "x": 1430,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "116b74d6.fa9e6b",
+        "type": "link in",
+        "z": "9e3e4566.027698",
+        "name": "sync-receive-01 to websocket",
+        "links": [
+            "59adc6a1.990668"
+        ],
+        "x": 1235,
+        "y": 520,
+        "wires": [
+            [
+                "93e54d02.08f3c"
+            ]
+        ]
+    },
+    {
+        "id": "25845b4e.eec354",
+        "type": "exec",
+        "z": "9e3e4566.027698",
+        "command": "pm2 restart red",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "",
+        "x": 1020,
+        "y": 260,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "392fe01c.487c1",
+        "type": "mqtt in",
+        "z": "9e3e4566.027698",
+        "name": "Restart Tray",
+        "topic": "+/+/+/restartTray",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "79250bf3.365cc4",
+        "x": 110,
+        "y": 260,
+        "wires": [
+            [
+                "4943bcac.86cf84"
+            ]
+        ]
+    },
+    {
+        "id": "4943bcac.86cf84",
+        "type": "json",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 250,
+        "y": 260,
+        "wires": [
+            [
+                "35a90497.a9402c"
+            ]
+        ]
+    },
+    {
+        "id": "5af02a55.ddad54",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Check Restart Setting",
+        "func": "if (msg.payload != 1) return null\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 780,
+        "y": 260,
+        "wires": [
+            [
+                "25845b4e.eec354"
+            ]
+        ]
+    },
+    {
+        "id": "af219179.74fb",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Filter Websocket MQTT like message",
+        "func": "var msg1 = null;\nvar msg2 = null\nvar mqttArray = msg.topic.split('/');\nif (mqttArray[3] == 'restartTray')\n{\n    msg2 = msg;\n}\nelse\n{\n    msg1 = msg;\n}\n\nreturn [msg1,msg2];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 250,
+        "y": 200,
+        "wires": [
+            [
+                "29c35de2.40a592"
+            ],
+            [
+                "35a90497.a9402c"
+            ]
+        ]
+    },
+    {
+        "id": "b7818884.e91148",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Create Readings",
+        "func": "var ib;\nvar device = flow.get('device');\nvar dataView     = new DataView(new ArrayBuffer(4));\n\nfor (ib = 0; ib < 4; ++ib)   dataView.setUint8(ib, msg.payload[0 * 4 + 3 - ib]);\ndevice.signalStrength.value = dataView.getInt32(0);\n\nreturn {topic : 'reading', payload : device};\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 570,
+        "y": 400,
+        "wires": [
+            [
+                "a9799f6.311e06"
+            ]
+        ]
+    },
+    {
+        "id": "cc8d43a8.8e1f1",
+        "type": "comment",
+        "z": "9e3e4566.027698",
+        "name": "Customization",
+        "info": " - Buffer size on Teensy Output\n - rfcomm port\n - code in Create Readings\n - code in Create Settings\n - websocket URL",
+        "x": 650,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "98cc27c7.e8d688",
+        "type": "inject",
+        "z": "9e3e4566.027698",
+        "name": "Init",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 110,
+        "y": 40,
+        "wires": [
+            [
+                "8e7317b4.d64098"
+            ]
+        ]
+    },
+    {
+        "id": "8e7317b4.d64098",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Cube Custom Info",
+        "func": "var cubeInfo = \n{\n    deviceType  : 'sync-receive',\n    name        : '01',\n};\nflow.set('cubeInfo', cubeInfo);\nreturn null;",
+        "outputs": 0,
+        "noerr": 0,
+        "x": 390,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "57051284.1d4dfc",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Make Pretty",
+        "func": "var filename = flow.get('cubeInfo').deviceType + '-' + flow.get('cubeInfo').name + '.json';\nreturn {topic: 'readFile', 'filename':filename};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 290,
+        "y": 340,
+        "wires": [
+            [
+                "2e6c0430.be51ec"
+            ]
+        ]
+    },
+    {
+        "id": "29c35de2.40a592",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Filter MQTT",
+        "func": "var mqttArray = msg.topic.split('/');\nif (mqttArray[0] != global.get('project')) return null;\nif (mqttArray[1] != flow.get('cubeInfo').deviceType) return null;\nif (mqttArray[2] != flow.get('cubeInfo').name) return null;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 140,
+        "wires": [
+            [
+                "fb320eeb.29893"
+            ]
+        ]
+    },
+    {
+        "id": "35a90497.a9402c",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Filter MQTT",
+        "func": "var mqttArray = msg.topic.split('/');\nif (mqttArray[0] != global.get('project')) return null;\nif (mqttArray[1] != flow.get('cubeInfo').deviceType) return null;\nif (mqttArray[2] != flow.get('cubeInfo').name) return null;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 260,
+        "wires": [
+            [
+                "5af02a55.ddad54"
+            ]
+        ]
+    },
+    {
+        "id": "7ed264c5.f194ac",
+        "type": "delay",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 1210,
+        "y": 460,
+        "wires": [
+            [
+                "93e54d02.08f3c"
+            ]
+        ]
+    },
+    {
+        "id": "436b7210.dd044c",
+        "type": "delay",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 1210,
+        "y": 400,
+        "wires": [
+            [
+                "5722f1f0.87baf"
+            ]
+        ]
+    },
+    {
+        "id": "469a474.9cef2b8",
+        "type": "http in",
+        "z": "9e3e4566.027698",
+        "name": "/sync-receive",
+        "url": "/sync-receive",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 600,
+        "wires": [
+            [
+                "4866621f.80c98c"
+            ]
+        ]
+    },
+    {
+        "id": "4866621f.80c98c",
+        "type": "function",
+        "z": "9e3e4566.027698",
+        "name": "Set Name And Device Type",
+        "func": "msg.payload['script'] = {};\nmsg.payload['script']['name'] = msg.payload.name\nmsg.payload['script']['deviceType'] = 'sync-receive';\nmsg.payload['script']['project'] = global.get('project');\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 360,
+        "y": 600,
+        "wires": [
+            [
+                "5449db1d.205034"
+            ]
+        ]
+    },
+    {
+        "id": "8a5a498d.20f998",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "Set Title",
+        "field": "payload.title",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "Sync-Receiver {{{payload.script.name}}}",
+        "output": "str",
+        "x": 300,
+        "y": 680,
+        "wires": [
+            [
+                "788ecc44.80eff4"
+            ]
+        ]
+    },
+    {
+        "id": "d3281622.5590f8",
+        "type": "subflow:6a402d92.12d7c4",
+        "z": "9e3e4566.027698",
+        "name": "",
+        "x": 1150,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "788ecc44.80eff4",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "script.global",
+        "field": "payload.script.global",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// Global Javascript\n        var restfulDevice = \n        {\n            deviceType  : '{{{payload.script.deviceType}}}',\n            name        : '{{{payload.script.name}}}',\n            project     : '{{{payload.script.project}}}'\n        };\n        var mqttDevice = null;\n        var device = null;\n        var editingChannel = false;\n\n        useWebSockets(true);\n        function onDocumentReady()\n        {\n            enableChannelEditor(false);\n        }\n        function onWebSocketOpen()\n        {\n        }\n        function onWebSocketClose()\n        {\n            \n        }\n        function onWebSocketMessage(msg)\n        {\n//            console.log(msg);\n            switch(msg.topic)\n            {\n                case 'readings':\n                    if (msg.mqttDevice.name == restfulDevice.name)\n                    {\n                        heartbeat();\n                        device = msg.payload;\n                        mqttDevice = msg.mqttDevice;\n                        updateDmaReadings();\n                    }\n                    break;\n                case 'getArchiveValues':\n                    if (msg.userID == userID)\n                    {\n                    }\n                    break;\n                case 'getJwtToken':\n                    if (msg.userID == userID) loadJwtToken(msg);\n                    break;\n                case 'settingAcknowledge':\n                    if (msg.userID == userID)\n                    {\n                        if (msg.payload != 'Success!') acknowledgeDialog('Acknowledge', 'Setting', msg.payload);\n                    }\n                    break;\n                default:\n                // code block\n            }\n        }\n        function enableChannelEditor(enable)\n        {\n            $('#rfFreq').prop(\"disabled\", !enable);\n            $('#transAddr').prop(\"disabled\", !enable);\n            $('#modemConfigIndex').prop(\"disabled\", !enable);\n            for (var ib = 0; ib <= 8; ++ib)\n            {\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                    $(checkBoxId).prop(\"disabled\", !enable);\n                }\n            }\n            $('#c0Start').prop(\"disabled\", !enable);\n            $('#c1Start').prop(\"disabled\", !enable);\n            $('#c2Start').prop(\"disabled\", !enable);\n            $('#c3Start').prop(\"disabled\", !enable);\n            $('#c0Stop').prop(\"disabled\", !enable);\n            $('#c1Stop').prop(\"disabled\", !enable);\n            $('#c2Stop').prop(\"disabled\", !enable);\n            $('#c3Stop').prop(\"disabled\", !enable);\n            $('#c0StatusLed').prop(\"disabled\", !enable);\n            $('#c1StatusLed').prop(\"disabled\", !enable);\n            $('#c2StatusLed').prop(\"disabled\", !enable);\n            $('#c3StatusLed').prop(\"disabled\", !enable);\n            if ( enable)\n            {\n                $('#editChannelButton').text('Stop Editing');\n            }\n            else\n            {\n                $('#editChannelButton').text('Edit');\n            }\n        }\n        function editChannelConfig()\n        {\n            editingChannel = !editingChannel;\n            enableChannelEditor(editingChannel);\n            if (!editingChannel)\n            {\n                var pow2 = [1,2,4,8,16,32,64,128];\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var startId = '#c' + ic.toString() + 'Start';\n                    var stopId = '#c' + ic.toString() + 'Stop';\n                    var startDeviceAtt = 'channelBeginTime' + (ic + 1).toString();\n                    var stopDeviceAtt =  'channelEndTime'   + (ic + 1).toString();\n                    var maskAtt = 'channelStateMask' + (ic + 1).toString();\n\n                    device[maskAtt].value = 0;\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                        if ($(checkBoxId).prop(\"checked\")) \n                        {\n                            device[maskAtt].value = device[maskAtt].value + pow2[ib];\n                        }\n                    }\n                    if (!isNaN(Number($(startId).val()))) device[startDeviceAtt].value = Number($(startId).val());\n                    if (!isNaN(Number($(stopId).val() ))) device[stopDeviceAtt].value  = Number($(stopId).val());\n                    var statusLedButtonId = '#c' + ic.toString() + 'StatusLed';\n                    if ($(statusLedButtonId).prop(\"checked\")) device.statusLedChannel.value = ic;\n                }\n                if (!isNaN(Number($('#rfFreq').val())))\n                {\n                    device.rfFreq.value = Number($('#rfFreq').val());\n                }\n                if (!isNaN(Number($('#transAddr').val())))\n                {\n                    device.transAddr.value = Number($('#transAddr').val());\n                }\n                device.modemConfigIndex.value = Number($('#modemConfigIndex').val());\n\n                var mqttMessage = \n                {\n                    topic   : mqttDevice.project + '/' +  mqttDevice.deviceType + '/' +  mqttDevice.name + '/setting',\n                    payload :  device\n                };\n                checkLogin(sendSettingToMqtt, mqttMessage);\n            }\n        }\n        function updateDmaReadings()\n        {\n            $('#linkQualityId').text(device.linkQuality.value);\n            $('#signalLevelId').text(device.signalLevel.value);\n            $('#signalStrength').text(device.signalStrength.value);\n            if(!editingChannel)\n            {\n                $('#rfFreq').val(device.rfFreq.value);\n                $('#transAddr').val(device.transAddr.value);\n                $('#modemConfigIndex').val(device.modemConfigIndex.value.toString());\n                for (var ic = 0; ic < 4; ++ic)\n                {\n                    var startId = '#c' + ic.toString() + 'Start';\n                    var stopId = '#c' + ic.toString() + 'Stop';\n                    var startDeviceAtt = 'channelBeginTime' + (ic + 1).toString();\n                    var stopDeviceAtt =  'channelEndTime'   + (ic + 1).toString();\n                    var maskAtt = 'channelStateMask' + (ic + 1).toString();\n                    $(startId).val(device[startDeviceAtt].value);\n                    $(stopId).val(device[stopDeviceAtt].value);\n                    var bits = getBits(device[maskAtt].value);\n                    for (var ib = 0; ib < 8; ++ib)\n                    {\n                        var checkBoxId = '#b' + ib.toString() + 'c' + ic.toString();\n                        var checked = false;\n                        if (bits[ib] == 1) checked = true;\n                        $(checkBoxId).prop(\"checked\", checked);\n                    }\n                    var statusLedButtonId = '#c' + ic.toString() + 'StatusLed';\n                    if (device.statusLedChannel.value == ic)\n                    {\n                        $(statusLedButtonId).prop(\"checked\", true);\n                    }\n                    else\n                    {\n                        $(statusLedButtonId).prop(\"checked\", false);\n                    }\n                }\n            }\n        }\n        function getBits(bytey)\n        {\n            var testByte = bytey;\n            var check = [0,0,0,0,0,0,0,0];\n            for (var ib = 0; ib < 8; ++ib)\n            {\n                check[ib] = testByte & 1;\n                testByte = testByte >> 1;\n            }\n            return check;\n        }\n",
+        "output": "str",
+        "x": 670,
+        "y": 600,
+        "wires": [
+            [
+                "c8cb8141.8d62c"
+            ]
+        ]
+    },
+    {
+        "id": "d94f9ee5.f8d2f",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "javascript",
+        "field": "payload.javascript",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "{{{payload.script.global}}}\n{{{payload.script.dangerZone}}}\n",
+        "output": "str",
+        "x": 660,
+        "y": 680,
+        "wires": [
+            [
+                "7d82e277.693dec"
+            ]
+        ]
+    },
+    {
+        "id": "7c27c3bc.515bcc",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "body",
+        "field": "payload.body",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "    <div width=\"100%\">\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12' align='center'>\n{{{payload.html.channelConfig}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.wifimon}}}\n            </div>\n        </div>\n        <div class='row' style='padding-bottom: 25px;'>\n            <div class='col-md-12'>\n{{{payload.html.dangerZone}}}\n            </div>\n        </div>\n    </div>\n    ",
+        "output": "str",
+        "x": 970,
+        "y": 720,
+        "wires": [
+            [
+                "d3281622.5590f8"
+            ]
+        ]
+    },
+    {
+        "id": "87409a44.c9eac8",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "html.wifimon",
+        "field": "payload.html.wifimon",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!-- Dashboard HTML -->\n                <div class='card'>\n                    <p class='card-title'>WiFi Connection</p>\n                    <div class='card-body' align=\"center\">\n                        <div class='row'  style='padding-top: 0px;'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Device Update</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <img src='/img/heartRed.png' id='heartBeatID' width='100px' height='100px'/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Signal Level (dBm)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='signalLevelId' >-100</span>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td width='60%' >\n                                        <span class='card-text' >Link Quality (/70)</span>\n                                    </td>\n                                    <td width='20%' align='center'></td>\n                                    <td width='20%' align='center'>\n                                        <span class='card-text' id='linkQualityId' >-1</span>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
+        "output": "str",
+        "x": 990,
+        "y": 640,
+        "wires": [
+            [
+                "12b87a6b.94e906"
+            ]
+        ]
+    },
+    {
+        "id": "c8cb8141.8d62c",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "script.dangerZone",
+        "field": "payload.script.dangerZone",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "mustache",
+        "template": "// dangerZone JavaScript\n        function restartTray()\n        {\n            optionDialog('Danger! Will Robinson, Danger!', 'Restart Tray', 'This should not be done lightly', ['Reset Tray','Cancel'], [function (){restartTrayButtonPress();}, function (){$( \"#optionDialog\" ).dialog( \"close\" );}]);\n        }\n        function restartTrayButtonPress()\n        {\n            $( \"#optionDialog\" ).dialog( \"close\" );\n            var mqttMessage = \n            {\n                topic   : restfulDevice.project + '/' +  restfulDevice.deviceType + '/' +  restfulDevice.name + '/restartTray',\n                payload :  1\n            };\n            checkLogin(sendSettingToMqtt, mqttMessage);\n        }\n",
+        "output": "str",
+        "x": 690,
+        "y": 640,
+        "wires": [
+            [
+                "d94f9ee5.f8d2f"
+            ]
+        ]
+    },
+    {
+        "id": "12b87a6b.94e906",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "html.dangerZone",
+        "field": "payload.html.dangerZone",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "                <div class='danger-card'>\n                    <div class='row'>\n                        <div class='col-md-2'>\n                        </div>\n                        <div class='col-md-8'>\n                            <p class='danger-card-title'>Danger Zone</p>\n                         </div>\n                        <div class='col-md-2'>\n                        </div>\n                    </div>\n                    <div class='danger-card-body' align=\"center\">\n                        <div class='row'>\n                            <table width='100%'>\n                                <tr>\n                                    <td width='100%' align=\"center\">\n                                        <button class='btn danger-card-button big-text' id=\"restartTrayButton\" onclick=\"restartTray()\" >Restart Tray</button>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
+        "output": "str",
+        "x": 1010,
+        "y": 680,
+        "wires": [
+            [
+                "7c27c3bc.515bcc"
+            ]
+        ]
+    },
+    {
+        "id": "5449db1d.205034",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "navBarIcon",
+        "field": "payload.navBarIcon",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "basicYellow.png",
+        "output": "str",
+        "x": 310,
+        "y": 640,
+        "wires": [
+            [
+                "8a5a498d.20f998"
+            ]
+        ]
+    },
+    {
+        "id": "7d82e277.693dec",
+        "type": "template",
+        "z": "9e3e4566.027698",
+        "name": "html.channelConfig",
+        "field": "payload.html.channelConfig",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<!-- channelConfig HTML -->\n                <div class='card'>\n                    <table class='card-title' width='100%'>\n                        <tr>\n                            <td width='20%' >\n                            </td>\n                            <td width='60%' align='center'>\n                                <span >Channel Configuration</span>\n                            </td>\n                            <td width='20%'>\n                                <button class='btn btn-block card-button' style='font-size: 50%;' id='editChannelButton' onclick=\"editChannelConfig()\" >Edit</button>\n                            </td>\n                        </tr>\n                    </table>\n                    <div class='card-body' align=\"center\">\n                        <div class='row' style='padding-bottom: 25px;'>\n                            <table width=\"100%\">\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">Bit</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">1</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">2</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">3</span></td>\n                                    <td width=\"20%\" align=\"center\"><span class=\"card-text\">4</span></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">0</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b0c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">1</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b1c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">2</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b2c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">3</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b3c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">4</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b4c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">5</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b5c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">6</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b6c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\" style=\"font-size: 150%;\">7</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"checkbox\" class=\"inputLarger\" id=\"b7c3\"></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\">Start (uS)</span></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c0Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c1Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c2Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c3Start\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                </tr>\n                                <tr>\n                                    <td width=\"20%\"><span class=\"card-text\">Stop (uS)</span></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c0Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c1Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c2Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                    <td width=\"20%\" align=\"center\"><input id=\"c3Stop\" type=\"text\" value=\"-1\" class=\"big-text\"  size=\"8\"/></td>\n                                </tr>\n                                 <tr>\n                                    <td width=\"20%\"><span class=\"card-text\">Status LED</span></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c0StatusLed\" name=\"statusLed\" value=\"0\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c1StatusLed\" name=\"statusLed\" value=\"1\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c2StatusLed\" name=\"statusLed\" value=\"2\"></td>\n                                    <td width=\"20%\" align=\"center\"><input type=\"radio\" class=\"inputLarger\" id=\"c3StatusLed\"  name=\"statusLed\" value=\"3\"></td>\n                                </tr>\n                           </table>\n                        </div>\n                        <div class='row' style='padding-bottom: 25px;'>\n                            <table width=\"100%\">\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Receiver Power (dBm)</span>\n                                    </td>\n                                    <td>\n                                        <span id=\"signalStrength\" class=\"big-text\">-100</span>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >RF Frequency (MHz)</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"rfFreq\" type=\"text\" value=\"-100\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Transmitter Address</span>\n                                    </td>\n                                    <td>\n                                        <input id=\"transAddr\" type=\"text\" value=\"-100\" class=\"big-text\"  size=\"8\"/>\n                                    </td>\n                                </tr>\n                                <tr>\n                                    <td>\n                                        <span class='card-text' >Modem Config</span>\n                                    </td>\n                                    <td>\n                                        <select class=\"custom-select big-text\" style=\"height:70px;line-height:70px;\" id=\"modemConfigIndex\">\n                                          <option value=\"0\">Bw125Cr45Sf128</option>\n                                          <option value=\"1\">Bw500Cr45Sf128</option>\n                                          <option value=\"2\">Bw31_25Cr48Sf512</option>\n                                          <option value=\"3\">Bw125Cr48Sf4096</option>\n                                        </select>\n                                    </td>\n                                </tr>\n                            </table>\n                        </div>\n                    </div>\n                </div>\n",
+        "output": "str",
+        "x": 1010,
+        "y": 600,
+        "wires": [
+            [
+                "87409a44.c9eac8"
+            ]
+        ]
+    },
+    {
+        "id": "6d1fdcad.4a0d54",
+        "type": "websocket in",
+        "z": "3f2da72f.995ab8",
+        "name": "/sync-receive/websocket",
+        "server": "cc197431.86bee8",
+        "client": "",
+        "x": 150,
+        "y": 380,
+        "wires": [
+            [
+                "dbecbc87.72d8d"
             ]
         ]
     }
