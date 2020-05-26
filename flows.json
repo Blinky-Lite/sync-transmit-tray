@@ -453,8 +453,7 @@
         "y": 140,
         "wires": [
             [
-                "5902d0c0.241a6",
-                "387a1885.99ed38"
+                "5902d0c0.241a6"
             ]
         ]
     },
@@ -1319,7 +1318,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "Sync-Transmitter {{{payload.script.name}}}",
+        "template": "Sync-Transmit {{{payload.script.name}}}",
         "output": "str",
         "x": 280,
         "y": 680,
@@ -1480,7 +1479,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "basicYellow.png",
+        "template": "metronomeYellow.png",
         "output": "str",
         "x": 290,
         "y": 640,
@@ -1535,7 +1534,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "<!-- Body HTML -->\n    <div class='container' width=\"100%\">\n        <div class='row vert-pad' >\n            <div class='col-md-12'>\n                <a class=\"btn jumbotron-button btn-block big-text bold-text\" width='80%' href=\"/sync-transmit?name=01\" >\n                    <table width=\"100%\" alight=\"left\">\n                        <tr>\n                            <td width=\"30%\" align='center'> <img src=\"/img/basicYellow.png\" height=\"70px\"/></td>\n                            <td width=\"70%\" align=\"left\">Sync-Transmitter 01</td>\n                        </tr>\n                    </table>\n                </a>\n            </div>\n        </div>\n    </div>",
+        "template": "<!-- Body HTML -->\n    <div class='container' width=\"100%\">\n        <div class='row vert-pad' >\n            <div class='col-md-12'>\n                <a class=\"btn jumbotron-button btn-block big-text bold-text\" width='80%' href=\"/sync-transmit?name=01\" >\n                    <table width=\"100%\" alight=\"left\">\n                        <tr>\n                            <td width=\"30%\" align='center'> <img src=\"/img/metronomeYellow.png\" height=\"70px\"/></td>\n                            <td width=\"70%\" align=\"left\">Sync-Transmit 01</td>\n                        </tr>\n                    </table>\n                </a>\n            </div>\n        </div>\n    </div>",
         "output": "str",
         "x": 750,
         "y": 500,
@@ -1554,7 +1553,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "Sync-Transmitters",
+        "template": "Synchronicity",
         "output": "str",
         "x": 470,
         "y": 500,
@@ -1592,7 +1591,7 @@
         "fieldType": "msg",
         "format": "html",
         "syntax": "mustache",
-        "template": "basicYellow.png",
+        "template": "metronomeYellow.png",
         "output": "str",
         "x": 610,
         "y": 500,
@@ -1609,20 +1608,6 @@
         "name": "",
         "x": 910,
         "y": 500,
-        "wires": []
-    },
-    {
-        "id": "387a1885.99ed38",
-        "type": "debug",
-        "z": "5f562f66.a301e",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "x": 1040,
-        "y": 200,
         "wires": []
     }
 ]
